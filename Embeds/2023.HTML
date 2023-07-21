@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>2021</title>
+  <title>2023</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -41,19 +40,26 @@
   <div id="videos-container"></div>
 
   <script>
-    const playlistId = 'PL5iH1YPpyDliI72mvmjicWAV0DyayHNfl'; // Replace with your playlist ID
+    const playlistId = 'PLJR7Blvhbh8bGMVAp7srE10bBiY9TJkVm'; // Replace with your playlist ID
     const apiKey = 'AIzaSyAV7jJxBt5QXaaYjgnux3XKJgI3VFpJD5o'; // Replace with your YouTube API key
+    const maxResults = 20; // Number of videos to load at a time
+    let nextPageToken = null; // To keep track of the next page token
 
-    // Fetch the videos from the YouTube API
-    fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=${playlistId}&key=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        const videoIds = data.items.map(item => item.snippet.resourceId.videoId);
-        return fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds.join(',')}&key=${apiKey}`);
-      })
-      .then(response => response.json())
-      .then(data => displayVideos(data.items))
-      .catch(error => console.error('Error fetching videos:', error));
+    function fetchVideos() {
+      fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${playlistId}&key=${apiKey}${nextPageToken ? '&pageToken=' + nextPageToken : ''}`)
+        .then(response => response.json())
+        .then(data => {
+          nextPageToken = data.nextPageToken || null; // Update the next page token
+
+          const videoIds = data.items.map(item => item.snippet.resourceId.videoId);
+          return fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds.join(',')}&key=${apiKey}`);
+        })
+        .then(response => response.json())
+        .then(data => {
+          displayVideos(data.items);
+        })
+        .catch(error => console.error('Error fetching videos:', error));
+    }
 
     function displayVideos(videos) {
       const videosContainer = document.getElementById('videos-container');
@@ -99,6 +105,16 @@
 
       return videoCard;
     }
+
+    // Load more videos when reaching the end of the page
+    window.addEventListener('scroll', () => {
+      if (nextPageToken && window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        fetchVideos();
+      }
+    });
+
+    // Initial load
+    fetchVideos();
   </script>
 </body>
 </html>
