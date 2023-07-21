@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Exemplo de Site</title>
+  <style>
+    body {
+      background-color: rgb(255, 103, 139);
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .background-image {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-image: url("https://i.imgur.com/6yrUpGm.png");
+      background-repeat: repeat;
+      background-size: cover;
+      animation: rotateBackground 20s infinite linear;
+    }
+
+    @keyframes rotateBackground {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .site-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      text-align: center;
+      font-family: "Arial", sans-serif;
+      color: #ffffff;
+    }
+
+    .header {
+      font-size: 50px;
+      font-family: "Comic Sans MS", cursive;
+    }
+
+    .button-container {
+      max-width: 500px; /* Defina um valor adequado para o máximo */
+      margin-top: 30px; /* Ajuste o espaçamento superior */
+    }
+
+    .button {
+		display: block;
+		margin-bottom: 20px;
+		padding: 20px 40px;
+		background-color: #ff3867;
+		color: #ffffff;
+		font-size: 20px;
+		text-decoration: none;
+		border-radius: 5px;
+		font-family: "Arial", sans-serif;
+		text-align: center;
+		transition: background-color 0.6s ease, border-radius 0.6s ease; /* Adicionamos a transição para border-radius */
+	  }
+
+	  .button:hover {
+		background-color: #ffffff;
+		color: #ff3867;
+		border-radius: 30px; /* Aumentamos o border-radius no estado de hover */
+	  }
+
+	  /* Transição para o estado normal (quando o mouse sai do botão) */
+	  .button:not(:hover) {
+		border-radius: 5px; /* Voltamos ao border-radius original */
+	  }
+
+    /* Estilo para o novo botão "Tutoriais de IA" */
+    .button.unavailable {
+      background-color: #ff3867;
+      color: #ffffff;
+	  cursor: not-allowed;
+    }
+
+    .button.unavailable:hover {
+      background-color: #aaaaaa;
+      color: #ffffff;
+	  border-radius: 30px;
+	  transition: background-color 0.6s ease;
+    }
+
+    /* Estilo para o texto no canto inferior direito */
+    .footer-text {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 14px;
+      color: #444444;
+      font-family: "Arial", sans-serif;
+      z-index: 9999; /* Definindo o z-index maior para ficar acima de tudo */
+      pointer-events: none; /* Impede que o texto seja clicável, para permitir que os elementos abaixo sejam clicados */
+    }
+
+    .footer-text a {
+      color: #444444;
+      text-decoration: none;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="site-content">
+    <div class="header">
+      Felps IA
+    </div>
+
+    <div class="button-container">
+      <a class="button" href="https://www.youtube.com/playlist?list=PLJR7Blvhbh8bGMVAp7srE10bBiY9TJkVm" target="_blank">Felps coisando perfeitamente 2023</a>
+      <a class="button" href="https://www.youtube.com/playlist?list=PL5iH1YPpyDliI72mvmjicWAV0DyayHNfl" target="_blank">Felps coisando perfeitamente 2021</a>
+      <a class="button" href="https://twitter.com/felpsAI" target="_blank">Imagens de IA do Felps</a>
+
+      <!-- Novo botão "Tutoriais de IA" -->
+      <a class="button unavailable" target="_blank">Tutoriais de IA</a>
+    </div>
+  </div>
+
+  <!-- Texto no canto inferior direito -->
+  <div class="footer-text">
+    Site (não oficial do felps) criado com ChatGPT e <a href="https://twitter.com/itsonlyme360" target="_blank">@itsonlyme360</a>
+  </div>
+
+  <script>
+    function addBackgroundImagesSlowly() {
+      const backgroundContainer = document.querySelector(".background");
+
+      let count = 0;
+      const interval = setInterval(() => {
+        const backgroundImg = document.createElement("div");
+        backgroundImg.classList.add("background-image");
+        backgroundImg.style.top = `${Math.random() * window.innerHeight}px`;
+        backgroundImg.style.left = `${Math.random() * window.innerWidth}px`;
+        backgroundContainer.appendChild(backgroundImg);
+
+        count++;
+        if (count >= 15) {
+          clearInterval(interval);
+        }
+      }, 500);
+    }
+
+    function moveBackgroundImagesSmoothly() {
+      const backgroundImages = document.querySelectorAll(".background-image");
+      backgroundImages.forEach((image) => {
+        const targetTop = Math.random() * window.innerHeight;
+        const targetLeft = Math.random() * window.innerWidth;
+
+        image.style.transition = "top 2s, left 2s";
+        image.style.top = `${targetTop}px`;
+        image.style.left = `${targetLeft}px`;
+      });
+    }
+
+    setTimeout(addBackgroundImagesSlowly, 10);
+
+    setInterval(moveBackgroundImagesSmoothly, 1500);
+  </script>
+</body>
+</html>
