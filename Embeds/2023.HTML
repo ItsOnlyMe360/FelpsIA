@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>2021</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .video-card {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .thumbnail {
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .video-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .channel-title {
+      font-size: 14px;
+      margin: 0;
+    }
+    .view-count {
+      font-size: 12px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="videos-container"></div>
+
+  <script>
+    const playlistId = 'PL5iH1YPpyDliI72mvmjicWAV0DyayHNfl'; // Replace with your playlist ID
+    const apiKey = 'AIzaSyAV7jJxBt5QXaaYjgnux3XKJgI3VFpJD5o'; // Replace with your YouTube API key
+
+    // Fetch the videos from the YouTube API
+    fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=${playlistId}&key=${apiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        const videoIds = data.items.map(item => item.snippet.resourceId.videoId);
+        return fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds.join(',')}&key=${apiKey}`);
+      })
+      .then(response => response.json())
+      .then(data => displayVideos(data.items))
+      .catch(error => console.error('Error fetching videos:', error));
+
+    function displayVideos(videos) {
+      const videosContainer = document.getElementById('videos-container');
+
+      videos.forEach(video => {
+        const videoCard = createVideoCard(video);
+        videosContainer.appendChild(videoCard);
+      });
+    }
+
+    function createVideoCard(video) {
+      const videoCard = document.createElement('div');
+      videoCard.classList.add('video-card');
+
+      const videoLink = document.createElement('a');
+      videoLink.href = `https://www.youtube.com/watch?v=${video.id}`;
+      videoLink.target = '_blank'; // Open the video in a new tab
+      videoCard.appendChild(videoLink);
+
+      const thumbnail = document.createElement('div');
+      thumbnail.classList.add('thumbnail');
+      thumbnail.style.backgroundImage = `url(${video.snippet.thumbnails.high.url})`;
+      videoLink.appendChild(thumbnail);
+
+      const title = document.createElement('p');
+      title.textContent = video.snippet.title;
+      videoCard.appendChild(title);
+
+      const videoInfo = document.createElement('div');
+      videoInfo.classList.add('video-info');
+      videoCard.appendChild(videoInfo);
+
+      const channelTitle = document.createElement('p');
+      channelTitle.textContent = video.snippet.channelTitle;
+      channelTitle.classList.add('channel-title');
+      videoInfo.appendChild(channelTitle);
+
+      const viewCount = document.createElement('p');
+      const views = video.statistics ? video.statistics.viewCount : 'N/A';
+      viewCount.textContent = `Views: ${views}`;
+      viewCount.classList.add('view-count');
+      videoInfo.appendChild(viewCount);
+
+      return videoCard;
+    }
+  </script>
+</body>
+</html>
