@@ -17,7 +17,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
+      z-index: -2;
       pointer-events: none;
     }
 
@@ -29,6 +29,7 @@
       background-repeat: repeat;
       background-size: cover;
       animation: rotateBackground 20s infinite linear;
+	  z-index: -1;
     }
 
     @keyframes rotateBackground {
@@ -44,8 +45,8 @@
       position: relative;
       z-index: 2;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: left;
+      align-items: left;
       flex-direction: column;
       height: 100vh;
       text-align: center;
@@ -54,13 +55,28 @@
     }
 
     .header {
+	  justify-content: left;
+	  align-items: left;
       font-size: 50px;
       font-family: "Comic Sans MS", cursive;
+	  color: #ffffff;
+	  padding-left: 40px;
+	  padding-top: 0px;
+    }
+
+    .svg-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -2;
     }
 
     .button-container {
-      max-width: 500px; /* Defina um valor adequado para o máximo */
-      margin-top: 30px; /* Ajuste o espaçamento superior */
+	  padding: 20px;
+	  padding-top: 200px;
+      max-width: 400px; /* Defina um valor adequado para o máximo */
     }
 
     .button {
@@ -105,13 +121,12 @@
     /* Estilo para o texto no canto inferior direito */
     .footer-text {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 5px;
+      right: 5px;
       font-size: 14px;
       color: #444444;
       font-family: "Arial", sans-serif;
       z-index: 9999; /* Definindo o z-index maior para ficar acima de tudo */
-      pointer-events: none; /* Impede que o texto seja clicável, para permitir que os elementos abaixo sejam clicados */
     }
 
     .footer-text a {
@@ -122,32 +137,89 @@
     .footer-text a:hover {
       text-decoration: underline;
     }
+	
+	.texto {
+	font-family: "Arial", sans-serif;
+	color: white;
+	padding-left: 200px;
+	font-size: 20px;
+	}
+
+    /* Estilo para o embed-container */
+    .embed-container {
+      position: absolute;
+      top: 0;
+      right: 250px; /* Ajuste o valor para posicionar corretamente o embed na direita */
+      width: calc(25% - 20px); /* Ajuste o valor conforme necessário */
+      height: calc(100% - 30px); /* Ajuste o valor conforme necessário */
+      background-color: #ffffff;
+      z-index: 1;
+    }
+
+    .embed-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .embed-container.hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div class="background"></div>
 
-  <div class="site-content">
-    <div class="header">
-      Felps IA
-    </div>
-
-    <div class="button-container">
-      <a class="button" href="https://www.youtube.com/playlist?list=PLJR7Blvhbh8bGMVAp7srE10bBiY9TJkVm" target="_blank">Felps coisando perfeitamente 2023</a>
-      <a class="button" href="https://www.youtube.com/playlist?list=PL5iH1YPpyDliI72mvmjicWAV0DyayHNfl" target="_blank">Felps coisando perfeitamente 2021</a>
-      <a class="button" href="https://twitter.com/felpsAI" target="_blank">Imagens de IA do Felps</a>
-
-      <!-- Novo botão "Tutoriais de IA" -->
-      <a class="button unavailable" target="_blank">Tutoriais de IA</a>
-    </div>
-  </div>
-
-  <!-- Texto no canto inferior direito -->
   <div class="footer-text">
     Site (não oficial do felps) criado com ChatGPT e <a href="https://twitter.com/itsonlyme360" target="_blank">@itsonlyme360</a>
   </div>
 
+  <div class="background"></div>
+  
+  <div class="header">
+      Felps IA
+  </div>
+
+  <div class="texto">
+    Um agregador de conteúdo IA do Felps.
+  </div>
+
+  <div class="svg-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+      <path fill="#ff3867" fill-opacity="1" d="M0,160L21.8,138.7C43.6,117,87,75,131,96C174.5,117,218,203,262,218.7C305.5,235,349,181,393,160C436.4,139,480,149,524,165.3C567.3,181,611,203,655,186.7C698.2,171,742,117,785,117.3C829.1,117,873,171,916,202.7C960,235,1004,245,1047,218.7C1090.9,192,1135,128,1178,112C1221.8,96,1265,128,1309,160C1352.7,192,1396,224,1418,240L1440,256L1440,0L1418.2,0C1396.4,0,1353,0,1309,0C1265.5,0,1222,0,1178,0C1134.5,0,1091,0,1047,0C1003.6,0,960,0,916,0C872.7,0,829,0,785,0C741.8,0,698,0,655,0C610.9,0,567,0,524,0C480,0,436,0,393,0C349.1,0,305,0,262,0C218.2,0,175,0,131,0C87.3,0,44,0,22,0L0,0Z"></path>
+    </svg>
+  </div>
+
+  <div class="button-container">
+    <a class="button" onclick="showEmbed('embed2023')">Felps coisando perfeitamente 2023</a>
+    <a class="button" onclick="showEmbed('embed2021')">Felps coisando perfeitamente 2021</a>
+    <a class="button" href="https://twitter.com/felpsAI" target="_blank">Imagens de IA do Felps</a>
+
+    <!-- Novo botão "Tutoriais de IA" -->
+    <a class="button unavailable" target="_blank">Tutoriais de IA</a>
+  </div>
+
+  <!-- Embed container para 2021 -->
+  <div class="embed-container hidden" id="embed2021">
+    <iframe src="https://itsonlyme360.github.io/FelpsIA/Embeds/2021.html" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
+
+  <!-- Embed container para 2023 -->
+  <div class="embed-container hidden" id="embed2023">
+    <iframe src="https://itsonlyme360.github.io/FelpsIA/Embeds/2023.HTML" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
+
   <script>
+    function showEmbed(embedId) {
+      const embedContainers = document.querySelectorAll(".embed-container");
+      embedContainers.forEach((container) => {
+        if (container.id === embedId) {
+          container.classList.remove("hidden");
+        } else {
+          container.classList.add("hidden");
+        }
+      });
+    }
+
     function addBackgroundImagesSlowly() {
       const backgroundContainer = document.querySelector(".background");
 
