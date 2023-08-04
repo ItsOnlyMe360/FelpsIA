@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundo com Imagens Aleatórias</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      cursor: none;
+      background-color: rgb(255, 103, 139);
+      cursor: none;
+    }
+    img {
+      position: absolute;
+      pointer-events: none;
+      transition: transform 3s ease;
+    }
+    #instructions {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      visibility: visible; /* Elemento visível inicialmente */
+	  z-index: 1;
+	  transition: transform 3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="instructions">Aperte H para alternar entre Modo Mouse e Modo Automático</div>
+  <script>
+    const numImages = 100; // Número de imagens
+    const images = [];
+    let useMouseMove = false; // Inicia como false para o movimento normal
+
+    // Função para criar uma imagem e posicioná-la aleatoriamente na tela
+    function createAndPositionImage() {
+      const img = document.createElement('img');
+      img.src = 'https://i.imgur.com/6yrUpGm.png';
+      const randomX = Math.random() * window.innerWidth;
+      const randomY = Math.random() * window.innerHeight;
+      const randomRotation = Math.random() * 360;
+      img.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRotation}deg)`;
+      document.body.appendChild(img);
+      return img;
+    }
+
+    // Cria as imagens e as adiciona ao corpo do documento
+    for (let i = 0; i < numImages; i++) {
+      const img = createAndPositionImage();
+      images.push(img);
+    }
+
+    // Função para mover as imagens aleatoriamente suavemente
+    function moveImages() {
+      for (let i = 0; i < numImages; i++) {
+        const img = images[i];
+        const randomX = Math.random() * window.innerWidth;
+        const randomY = Math.random() * window.innerHeight;
+        const randomRotation = Math.random() * 360;
+        if (!useMouseMove) {
+          img.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRotation}deg)`;
+        }
+      }
+    }
+
+    // Movimenta as imagens de tempos em tempos
+    setInterval(moveImages, 3000); // Movimenta a cada 3 segundos (3000 milissegundos)
+
+    // Atualiza a posição das imagens de acordo com o mouse
+    function updateImagesPosition(event) {
+      if (useMouseMove) {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+        for (let i = 0; i < numImages; i++) {
+          const img = images[i];
+          const randomX = mouseX + (Math.random() - 0.5) * 500;
+          const randomY = mouseY + (Math.random() - 0.5) * 500;
+          img.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+      }
+    }
+
+    // Adiciona o event listener para alternar o movimento entre o mouse e o movimento normal quando a tecla "H" for pressionada
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'h' || event.key === 'H') {
+        useMouseMove = !useMouseMove; // Inverte o valor de useMouseMove
+      }
+    });
+
+    // Adiciona o event listener para capturar o movimento do mouse
+    document.addEventListener('mousemove', updateImagesPosition);
+
+    // Remover o texto de instrução após 10 segundos
+    setTimeout(() => {
+      const instructions = document.getElementById('instructions');
+      instructions.style.visibility = 'hidden'; // Torna o elemento invisível
+    }, 10000); // 10000 milissegundos = 10 segundos
+
+  </script>
+</body>
+</html>
